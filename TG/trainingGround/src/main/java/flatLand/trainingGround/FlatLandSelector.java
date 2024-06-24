@@ -70,12 +70,23 @@ public class FlatLandSelector {
 	}
 
 	public void reposition(int x, int y, int posX, int posY) {
-
+		System.err.println("x: "+x);
+		System.err.println("y: "+y);
 		FlatLander flatLanderTokenized = flSelector.getFlatLanderTokenized();
+		
+		
 		if (flatLanderTokenized != null) {
-			flatLanderTokenized.setX(flatLanderTokenized.getX()+(x-posX));
-			flatLanderTokenized.setY(flatLanderTokenized.getY()+(y-posY));
+		
+			
+
+			
+			int diffx = x-flatLanderTokenized.getX();
+			flatLanderTokenized.setX(this.theEyeInTheSky.mapFromScreenSpaceToFlatLAndX( x));
+				
+			int diffy = y-flatLanderTokenized.getY();
+			flatLanderTokenized.setY(this.theEyeInTheSky.mapFromScreenSpaceFlatLandY(y));
 			flatLanderTokenized.updatecurrentBB();
+			
 		}
 	}
 }

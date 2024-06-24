@@ -8,6 +8,7 @@ import java.awt.GridBagLayout;
 import java.awt.MouseInfo;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
+import java.awt.event.MouseMotionListener;
 import java.awt.image.BufferStrategy;
 import java.awt.image.BufferedImage;
 import java.io.ByteArrayOutputStream;
@@ -76,6 +77,8 @@ public class App extends LOG {
 	private static ArrayList<Graphics> gQueue = new ArrayList<>();
 	private static BigDecimal fPS = BigDecimal.ZERO;
 	private static FlatLandSelector flatLandSelector;
+	protected static int xInitiial;
+	protected static int yInitial;
 	public static void main(String[] args) throws IOException {
 		GameStatus statusInstance = GameStatus.getInstance();
 		 statusInstance.addStatus(GAMSTATUS.FINPROD);
@@ -115,20 +118,21 @@ public class App extends LOG {
 		flatLandSelector = new FlatLandSelector(theEyeInTheSky,flatLand);
 		panel.addMouseListener(new MouseListener() {
 			
-			private int xInitiial;
-			private int yInitial;
+
 
 			@Override
 			public void mouseClicked(MouseEvent arg0) {
-				
+				System.err.println("Clicked");
 			}
 			
 			@Override
 			public void mouseEntered(MouseEvent arg0) {
+				System.err.println("entered");
 			}
 			
 			@Override
 			public void mouseExited(MouseEvent arg0) {
+				System.err.println("exited");
 			}
 			
 			@Override
@@ -141,14 +145,28 @@ public class App extends LOG {
 			
 			@Override
 			public void mouseReleased(MouseEvent arg0) {
-								int posX = canvasWidth/2-cameraWidth / 2;
-				int x = arg0.getX();
-				int y = arg0.getY();
-				System.err.println("released");
-				flatLandSelector.reposition(x, y,xInitiial,yInitial);
+								
+				
+
 			}});
 		
+panel.addMouseMotionListener(new MouseMotionListener() {
+	
+	@Override
+	public void mouseMoved(MouseEvent arg0) {
 
+		
+	}
+	
+	@Override
+	public void mouseDragged(MouseEvent arg0) {
+
+		int x = arg0.getX();
+		int y = arg0.getY();
+		flatLandSelector.reposition(x, y,xInitiial,yInitial);
+		
+	}
+});
 		flatLandWindow = new FlatLandWindow("Hello World", flatLand, panel, canvasWidth, canvasHeight);
 		mel.buildKeyBoardHandler(panel);
 		panel.requestFocus();

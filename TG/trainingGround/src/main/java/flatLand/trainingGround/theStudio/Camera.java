@@ -179,10 +179,26 @@ public class Camera {
 		double slope = 1.0 * (output_end - output_start) / (input_end - input_start);
 		return output_start + (int) Math.round(slope * (input - input_start));
 	}
+	public int mapFromScreenSpaceToFlatLAndX(int input) {
+		int input_end = cameraPosXoncanvas + cameraWidth;
+		int input_start = cameraPosXoncanvas;
+		int output_start = 0;
+		int output_end = cameraWidth;
+		double slope = 1.0 * (output_end - output_start) / (input_end - input_start);
+		return output_start + (int) Math.round(slope * (input - input_start));
+	}
 
 	public int mapFromFlatLandToScreenSpaceY(int input) {
 		int input_end = cameraPosYinFlatland + cameraHeight;
 		int input_start = cameraPosYinFlatland;
+		int output_start = 0;
+		int output_end = cameraHeight;
+		double slope = 1.0 * (output_end - output_start) / (input_end - input_start);
+		return output_start + (int) Math.round(slope * (input - input_start));
+	}
+	public int mapFromScreenSpaceFlatLandY(int input) {
+		int input_end = cameraPosYoncanvas + cameraHeight;
+		int input_start = cameraPosYoncanvas;
 		int output_start = 0;
 		int output_end = cameraHeight;
 		double slope = 1.0 * (output_end - output_start) / (input_end - input_start);
