@@ -37,5 +37,14 @@
 	<classpathentry combineaccessrules="false" kind="src" path="/PBC"/>
 	<classpathentry combineaccessrules="false" kind="src" path="/theStart"/>
 	<classpathentry kind="src" path="/LOGGING"/>
+	<classpathentry kind="lib" path="/home/wes/.m2/repository/org/joml/joml/1.9.6/joml-1.9.6.jar" sourcepath="/home/wes/.m2/repository/org/joml/joml/1.9.6/joml-1.9.6-sources.jar">
+		<attributes>
+			<attribute name="maven.pomderived" value="true"/>
+			<attribute name="maven.groupId" value="org.joml"/>
+			<attribute name="maven.artifactId" value="joml"/>
+			<attribute name="maven.version" value="1.9.6"/>
+			<attribute name="maven.scope" value="compile"/>
+		</attributes>
+	</classpathentry>
 	<classpathentry kind="output" path="target/classes"/>
 </classpath>
