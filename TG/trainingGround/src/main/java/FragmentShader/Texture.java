@@ -7,8 +7,9 @@ import java.util.Stack;
 import org.joml.Vector4f;
 
 import FragmentShader.Texture.TextureFrame;
+import Logging.LOG;
 
-public class Texture {
+public class Texture extends LOG{
 
 
 
@@ -34,7 +35,7 @@ public class Texture {
 
 
 	public Texture(ByteBuffer buf) throws Exception {
-		Stack<TextureFrame> stack = new Stack<>();
+		Stack<TextureFrame> stack = new Stack<TextureFrame>();
 		TextureFrame textureFrame = new TextureFrame();
         stack.push(textureFrame);
         IntBuffer w = textureFrame.getW();
@@ -97,10 +98,10 @@ public class Texture {
 	
 
 	private  void loadTexture(String fileName) throws Exception {
-		System.out.println("fileName: "+fileName);
+		LOG.println("fileName: "+fileName);
 		ByteBuffer buf = null;
 
-		Stack<TextureFrame> stack = new Stack<>();
+		Stack<TextureFrame> stack = new Stack<TextureFrame>();
 		TextureFrame textureFrame = new TextureFrame();
         stack.push(textureFrame);
         IntBuffer w = textureFrame.getW();
@@ -132,6 +133,24 @@ public class Texture {
 
 	public float getHeight() {
 		return height;
+	}
+
+
+
+
+
+
+
+	public void some_awesome_function_that_is_totaly_finished_and_not_made_up_oh_hey_look_over_there(
+			double somefuckingnumberthatisjustfuckingmadeupbyheywhoare_you_what_are_you_doing_arrrrrrrrgh,
+			int your_currentweighttimeforIT_seconds, int your_currentweighttimeforIT_minuts,
+			int your_currentweighttimeforIT_hours, int your_currentweighttimeforIT_days,
+			int your_currentweighttimeforIT_weeks, int your_currentweighttimeforIT_months,
+			int your_currentweighttimeforIT_Years, int your_currentweighttimeforIT_decades,
+			int somethingIcallAweekoyear, int s0m3_aBRACOBRDOBRADUBUCIAIcallYestevinsgiving,
+			int mytotalbankedXXX_user_ACCESS_RESTRICTED_XXX) {
+		// TODO Auto-generated method stub
+		
 	}
 
 }

@@ -1,31 +1,16 @@
 package flatLand.trainingGround;
 
-import java.awt.Canvas;
 import java.awt.Color;
-import java.awt.Dimension;
 import java.awt.Graphics;
-import java.awt.GridBagLayout;
 import java.awt.MouseInfo;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.awt.event.MouseMotionListener;
-import java.awt.image.BufferStrategy;
-import java.awt.image.BufferedImage;
-import java.io.ByteArrayOutputStream;
-import java.io.FileWriter;
 import java.io.IOException;
-import java.io.PrintStream;
-import java.io.PrintWriter;
 import java.math.BigDecimal;
 import java.math.RoundingMode;
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.Hashtable;
-
-import javax.swing.JComponent;
-import javax.swing.JFrame;
-import javax.swing.JPanel;
-
 import Actions.ActionsInterface;
 import Actions.DrawABlob;
 import Actions.DrawAProtoCloud;
@@ -33,32 +18,25 @@ import Actions.DrawArc;
 import Actions.DrawArcFasterVersion1;
 import Actions.GoInAStrightLineFor;
 import Actions.Wonder;
-
-import Drawing.ImagePile;
-import FlatLand.ViewableFlatLand;
 import FlatLand.Physics.Physics;
 import FlatLand.Physics.UpdateTimeSingleton;
+import FlatLandStructure.ViewableFlatLand;
 import FlatLander.FlatLandFacebook;
 import FlatLander.FlatLander;
-import FlatLander.PlayerKeybordHandler;
-import FlatLander.TypeOfEntity;
 import Logging.LOG;
 import Notes.Notes;
-import Player.Player;
 import View.FlatLandWindow;
-import View.GameScreen;
-import XMLLoader.FlatLanderWrper;
-import XMLLoader.TERMINAL;
+
 import XMLLoader.XmlLevelLoader;
 import flatLand.trainingGround.Sprites.SkeletonTwo;
-import flatLand.trainingGround.Sprites.TerminalSprite;
 import flatLand.trainingGround.theStudio.Camera;
 import src.ANT;
 import src.Direction;
 import src.Simulation;
 import src.Tiles;
 import src.tile;
-import theStart.theView.TheStartCamera;
+import theStart.theView.TheControls.GameScreen;
+import theStart.theView.TheControls.TheStartCamera;
 
 public class App extends LOG {
 	private static FlatLandWindow flatLandWindow;
@@ -84,8 +62,8 @@ public class App extends LOG {
 		 statusInstance.addStatus(GAMSTATUS.FINPROD);
 
 		HashMap<String, String> logs = new HashMap<>();
-		logs.put("log", "/res/folder");
-		LOG.set_current_working_directory("/home/wes/git/repository/TG/trainingGround");
+		logs.put("log", "res/folder");
+		LOG.set_current_working_directory("");
 		LOG.register_output_forLogging(LOG, logs);
 
 		int posY = (canvasHeight / 2) - cameraHeight / 2;
@@ -200,7 +178,7 @@ panel.addMouseMotionListener(new MouseMotionListener() {
 			long[] timeSpentOnTakingPictureAndDeveloping = new long[60];
 			long[] timeSpentOnOther = new long[60];
 
-			System.out.println("run the simulation");
+			LOG.println("run the simulation");
 			while (!flatLandWindow.isClose()) {
 				long start = System.currentTimeMillis();
 				long startUpdate = System.currentTimeMillis();
@@ -299,6 +277,7 @@ panel.addMouseMotionListener(new MouseMotionListener() {
 			LOG.close();
 		} catch (InterruptedException e) {
 			e.printStackTrace();
+			LOG.println(e.getMessage());
 		}
 
 		LOG.close();

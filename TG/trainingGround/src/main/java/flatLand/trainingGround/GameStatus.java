@@ -9,7 +9,7 @@ public class GameStatus {
 	
 	
 	private static GameStatus instance;
-	private ArrayList<GAMSTATUS> status = new ArrayList<>(); 
+	private ArrayList<GAMSTATUS> status = new ArrayList<GAMSTATUS>(); 
 	
 	public static GameStatus getInstance() {
 		if (instance == null) {

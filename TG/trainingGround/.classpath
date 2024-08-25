@@ -13,37 +13,45 @@
 			<attribute name="maven.pomderived" value="true"/>
 		</attributes>
 	</classpathentry>
+	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER/org.eclipse.jdt.internal.debug.ui.launcher.StandardVMType/JavaSE-1.8">
+		<attributes>
+			<attribute name="maven.pomderived" value="true"/>
+		</attributes>
+	</classpathentry>
 	<classpathentry kind="con" path="org.eclipse.m2e.MAVEN2_CLASSPATH_CONTAINER">
 		<attributes>
 			<attribute name="maven.pomderived" value="true"/>
 		</attributes>
 	</classpathentry>
-	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER/org.eclipse.jdt.internal.debug.ui.launcher.StandardVMType/JavaSE-14">
+	<classpathentry kind="src" path="/theStart">
 		<attributes>
 			<attribute name="module" value="true"/>
-			<attribute name="maven.pomderived" value="true"/>
 		</attributes>
 	</classpathentry>
-	<classpathentry combineaccessrules="false" kind="src" path="/AntAnimation"/>
-	<classpathentry combineaccessrules="false" kind="src" path="/Sprites"/>
-	<classpathentry combineaccessrules="false" kind="src" path="/SaverOfLevels"/>
-	<classpathentry combineaccessrules="false" kind="src" path="/BoardTemplate"/>
-	<classpathentry combineaccessrules="false" kind="src" path="/SonificationStructure"/>
-	<classpathentry combineaccessrules="false" kind="src" path="/GameView"/>
-	<classpathentry combineaccessrules="false" kind="src" path="/ActionLibrary"/>
-	<classpathentry combineaccessrules="false" kind="src" path="/LoaderOfLevels"/>
-	<classpathentry combineaccessrules="false" kind="src" path="/AnimationFX"/>
 	<classpathentry combineaccessrules="false" kind="src" path="/USERINPUT"/>
+	<classpathentry combineaccessrules="false" kind="src" path="/Sprites"/>
+	<classpathentry combineaccessrules="false" kind="src" path="/SonificationStructure"/>
+	<classpathentry combineaccessrules="false" kind="src" path="/SaverOfLevels"/>
 	<classpathentry combineaccessrules="false" kind="src" path="/PBC"/>
-	<classpathentry combineaccessrules="false" kind="src" path="/theStart"/>
-	<classpathentry kind="src" path="/LOGGING"/>
-	<classpathentry kind="lib" path="/home/wes/.m2/repository/org/joml/joml/1.9.6/joml-1.9.6.jar" sourcepath="/home/wes/.m2/repository/org/joml/joml/1.9.6/joml-1.9.6-sources.jar">
+	<classpathentry combineaccessrules="false" kind="src" path="/LOGGING"/>
+	<classpathentry combineaccessrules="false" kind="src" path="/LoaderOfLevels"/>
+	<classpathentry combineaccessrules="false" kind="src" path="/GameView"/>
+	<classpathentry combineaccessrules="false" kind="src" path="/BoardTemplate"/>
+	<classpathentry combineaccessrules="false" kind="src" path="/AntAnimation"/>
+	<classpathentry combineaccessrules="false" kind="src" path="/AnimationFX"/>
+	<classpathentry combineaccessrules="false" kind="src" path="/ActionLibrary"/>
+	<classpathentry kind="src" path="/Monopoly_Island_Index"/>
+	<classpathentry excluding="**" kind="src" output="target/classes" path="src/main/resources">
 		<attributes>
 			<attribute name="maven.pomderived" value="true"/>
-			<attribute name="maven.groupId" value="org.joml"/>
-			<attribute name="maven.artifactId" value="joml"/>
-			<attribute name="maven.version" value="1.9.6"/>
-			<attribute name="maven.scope" value="compile"/>
+			<attribute name="optional" value="true"/>
+		</attributes>
+	</classpathentry>
+	<classpathentry excluding="**" kind="src" output="target/test-classes" path="src/test/resources">
+		<attributes>
+			<attribute name="maven.pomderived" value="true"/>
+			<attribute name="test" value="true"/>
+			<attribute name="optional" value="true"/>
 		</attributes>
 	</classpathentry>
 	<classpathentry kind="output" path="target/classes"/>

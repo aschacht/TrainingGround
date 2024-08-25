@@ -13,7 +13,7 @@ public class FlatLandSelector {
 	private Camera theEyeInTheSky;
 	private FlatLanderSelectorTokenizer flSelector;
 
-	public FlatLandSelector(Camera theEyeInTheSky, FlatLand.ViewableFlatLand flatLandLE) {
+	public FlatLandSelector(Camera theEyeInTheSky, FlatLandStructure.ViewableFlatLand flatLandLE) {
 		this.theEyeInTheSky = theEyeInTheSky;
 		flSelector = FlatLanderSelectorTokenizer.getInstance();
 	}

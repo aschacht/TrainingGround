@@ -1,25 +1,19 @@
 package flatLand.trainingGround.theStudio;
 
-import java.awt.Canvas;
 import java.awt.Color;
 import java.awt.Graphics;
-import java.awt.Graphics2D;
 import java.awt.image.BufferStrategy;
 import java.awt.image.BufferedImage;
 import java.util.ArrayList;
-import java.util.Hashtable;
-import java.util.Iterator;
 
-import FlatLand.ViewableFlatLand;
+import FlatLandStructure.ViewableFlatLand;
 import FlatLander.BoundingBox;
 import FlatLander.FlatLandFacebook;
 import FlatLander.FlatLander;
-import Player.Player;
 import XMLLoader.FlatLanderWrper;
 import XMLLoader.PlayerWrper;
 import flatLand.trainingGround.GAMSTATUS;
 import flatLand.trainingGround.GameStatus;
-import flatLand.trainingGround.Sprites.Sprites;
 
 public class Camera {
 	private ViewableFlatLand flatland;
@@ -132,7 +126,7 @@ public class Camera {
 				if ((x >= 0 || x <= cameraWidth) && (y >= 0 || y <= cameraHeight)) {
 
 					if (terminal != null)
-						graphics.drawImage(term, x, y - 50, null);
+						graphics.drawImage(term, x-150, y - 150, null);
 					graphics.drawImage(bufferedImage, x, y, null);
 					if (flatLander.isDrawBB()) {
 						BoundingBox currentflatLanderBB = flatLander.getCurrentflatLanderBB();

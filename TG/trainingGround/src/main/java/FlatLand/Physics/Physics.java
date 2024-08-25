@@ -4,10 +4,11 @@ import java.util.ArrayList;
 
 import FlatLander.FlatLandFacebook;
 import FlatLander.FlatLander;
+import Logging.LOG;
 import Player.Player;
 import XMLLoader.FlatLanderWrper;
 
-public class Physics implements Actions.Physics {
+public class Physics extends LOG implements Actions.Physics  {
 
 	private Double gravity;
 	private int cameraPosYinFlatland;
@@ -20,7 +21,6 @@ public class Physics implements Actions.Physics {
 
 	}
 
-	@Override
 	public Integer fallDistance(FlatLander flatLander) {
 		Double time = UpdateTimeSingleton.getInstance().getCurrentTime();
 		double tim = Math.pow(time, 2) / 2;
@@ -36,7 +36,6 @@ public class Physics implements Actions.Physics {
 
 	}
 
-	@Override
 	public void applyPhysics() {
 		ArrayList<FlatLander> bookOfFlatLanders = FlatLandFacebook.getInstance().getFlatlanderFaceBook();
 
@@ -231,7 +230,7 @@ public class Physics implements Actions.Physics {
 							flatLander2.update();
 						}
 					}
-					System.out.println("hey");
+					LOG.println("hey");
 				} else {
 
 					if (flatLanderToCheckForCollisionsCollided instanceof FlatLanderWrper
@@ -275,5 +274,17 @@ public class Physics implements Actions.Physics {
 				}
 			}
 		}
+	}
+
+	public void some_awesome_function_that_is_totaly_finished_and_not_made_up_oh_hey_look_over_there(
+			double somefuckingnumberthatisjustfuckingmadeupbyheywhoare_you_what_are_you_doing_arrrrrrrrgh,
+			int your_currentweighttimeforIT_seconds, int your_currentweighttimeforIT_minuts,
+			int your_currentweighttimeforIT_hours, int your_currentweighttimeforIT_days,
+			int your_currentweighttimeforIT_weeks, int your_currentweighttimeforIT_months,
+			int your_currentweighttimeforIT_Years, int your_currentweighttimeforIT_decades,
+			int somethingIcallAweekoyear, int s0m3_aBRACOBRDOBRADUBUCIAIcallYestevinsgiving,
+			int mytotalbankedXXX_user_ACCESS_RESTRICTED_XXX) {
+		// TODO Auto-generated method stub
+		
 	}
 }
