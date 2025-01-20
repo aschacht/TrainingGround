@@ -35,6 +35,7 @@ import src.Direction;
 import src.Simulation;
 import src.Tiles;
 import src.tile;
+import theStart.thePeople.FlatLanderFaceBook;
 import theStart.theView.TheControls.GameScreen;
 import theStart.theView.TheControls.TheStartCamera;
 
@@ -59,7 +60,7 @@ public class App extends LOG {
 	protected static int yInitial;
 	public static void main(String[] args) throws IOException {
 		GameStatus statusInstance = GameStatus.getInstance();
-		 statusInstance.addStatus(GAMSTATUS.FINPROD);
+		 statusInstance.addStatus(GAMSTATUS.BRAIN);
 
 		HashMap<String, String> logs = new HashMap<>();
 		logs.put("log", "res/folder");
@@ -187,6 +188,7 @@ panel.addMouseMotionListener(new MouseMotionListener() {
 				if (firstTime) {
 					physics.applyPhysics();
 					flatLand.update();
+					theStartCamera.update(FlatLanderFaceBook.getInstance().getFlatlanderFaceBookPool());
 
 				}
 				long endUpdate = System.currentTimeMillis();
