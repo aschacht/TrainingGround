@@ -24,7 +24,7 @@ public class UpdateTimeSingleton {
 	}
 
 
-	public static void setCurrentTime(Double currentTime) {
+	public void setCurrentTime(Double currentTime) {
 		CurrentTime = currentTime;
 	}
 

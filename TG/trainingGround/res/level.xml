@@ -6,6 +6,14 @@
 		<background></background>
 		<format>2dPlatformer</format>
 	</levelstats>
+	<object type="Item">
+		<name>mike</name>
+		<xpos>100</xpos>
+		<ypos>100</ypos>
+		<scale>150</scale>
+		<sprite>res/zombie_n_skeleton2.png</sprite>
+	</object>
+	
 	<object type="ground_stone">
 		<name>ground1</name>
 		<xpos>0</xpos>

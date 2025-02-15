@@ -88,13 +88,20 @@ public class Camera {
 		}
 		for (FlatLander flatLander : bookOfFlatLanders) {
 
-			if (flatLander instanceof XMLLoader.FlatLanderWrper) {
-				BufferedImage bufferedImage = ((XMLLoader.FlatLanderWrper) flatLander).getSprite().update(flatLander);
+			if (flatLander instanceof FlatLanderWrper) {
+				BufferedImage bufferedImage = ((FlatLanderWrper) flatLander).getSprite().update(flatLander);
+				FlatLanderWrper terminal = ((XMLLoader.FlatLanderWrper) flatLander).getTerminal();
+
+				BufferedImage term = null;
+				if (terminal != null)
+					term = terminal.getSprite().update(flatLander);
+				
 				int x = mapFromFlatLandToScreenSpaceX(flatLander.getX());
 				int y = mapFromFlatLandToScreenSpaceY(flatLander.getY());
 
 				if ((x >= 0 || x <= cameraWidth) && (y >= 0 || y <= cameraHeight)) {
-
+					if (terminal != null)
+						graphics.drawImage(term, x-150, y - 150, null);
 					graphics.drawImage(bufferedImage, x, y, null);
 					if (flatLander.isDrawBB()) {
 						BoundingBox currentflatLanderBB = flatLander.getCurrentflatLanderBB();

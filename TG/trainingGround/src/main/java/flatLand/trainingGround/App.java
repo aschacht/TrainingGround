@@ -19,6 +19,7 @@ import Actions.DrawArcFasterVersion1;
 import Actions.GoInAStrightLineFor;
 import Actions.Wonder;
 import FlatLand.Physics.Physics;
+import FlatLand.Physics.TypeOfEntity;
 import FlatLand.Physics.UpdateTimeSingleton;
 import FlatLandStructure.ViewableFlatLand;
 import FlatLander.FlatLandFacebook;
@@ -26,7 +27,7 @@ import FlatLander.FlatLander;
 import Logging.LOG;
 import Notes.Notes;
 import View.FlatLandWindow;
-
+import XMLLoader.ItemWraper;
 import XMLLoader.XmlLevelLoader;
 import flatLand.trainingGround.Sprites.SkeletonTwo;
 import flatLand.trainingGround.theStudio.Camera;
@@ -58,12 +59,14 @@ public class App extends LOG {
 	private static FlatLandSelector flatLandSelector;
 	protected static int xInitiial;
 	protected static int yInitial;
+	private static int targetFrameRate=66;
+
 	public static void main(String[] args) throws IOException {
 		GameStatus statusInstance = GameStatus.getInstance();
-		 statusInstance.addStatus(GAMSTATUS.BRAIN);
+		statusInstance.addStatus(GAMSTATUS.BRAIN);
 
 		HashMap<String, String> logs = new HashMap<>();
-		logs.put("log", "res/folder");
+		logs.put("log", "res/folder/");
 		LOG.set_current_working_directory("");
 		LOG.register_output_forLogging(LOG, logs);
 
@@ -75,77 +78,69 @@ public class App extends LOG {
 		mel.buildTerminal();
 
 		mel.setSprite(new SkeletonTwo("res/zombie_n_skeleton2.png", 100));
+
 		Object theRequestie = new Object();
 		while (!FlatLandFacebook.getInstance().requestToken(theRequestie)) {
 		}
 		FlatLandFacebook.getInstance().add(mel, theRequestie);
 		FlatLandFacebook.getInstance().releaseToken(theRequestie);
 
-		
-
 		int posX = (canvasWidth / 2) - cameraWidth / 2;
-		theEyeInTheSky = new Camera(flatLand, cameraWidth, cameraHeight ,canvasWidth, canvasHeight, posX, posY,
-				mel);
+		theEyeInTheSky = new Camera(flatLand, cameraWidth, cameraHeight, canvasWidth, canvasHeight, posX, posY, mel);
 
-		theStartCamera = new TheStartCamera(cameraWidth, cameraHeight, posX, posY,
-				flatLand);
+		theStartCamera = new TheStartCamera(cameraWidth, cameraHeight, posX, posY, flatLand,16777214,25,null);
 
-		
 		GameScreen panel = new GameScreen(canvasWidth, canvasHeight, statusInstance);
 		panel.setTheEyeInTheSky(theEyeInTheSky);
 		panel.setTheStartCamera(theStartCamera);
-		flatLandSelector = new FlatLandSelector(theEyeInTheSky,flatLand);
+		flatLandSelector = new FlatLandSelector(theEyeInTheSky, flatLand);
 		panel.addMouseListener(new MouseListener() {
-			
-
 
 			@Override
 			public void mouseClicked(MouseEvent arg0) {
 				System.err.println("Clicked");
 			}
-			
+
 			@Override
 			public void mouseEntered(MouseEvent arg0) {
 				System.err.println("entered");
 			}
-			
+
 			@Override
 			public void mouseExited(MouseEvent arg0) {
 				System.err.println("exited");
 			}
-			
+
 			@Override
 			public void mousePressed(MouseEvent arg0) {
 				xInitiial = arg0.getX();
 				yInitial = arg0.getY();
-				
+
 				flatLandSelector.select(xInitiial, yInitial);
 			}
-			
+
 			@Override
 			public void mouseReleased(MouseEvent arg0) {
-								
-				
 
-			}});
-		
-panel.addMouseMotionListener(new MouseMotionListener() {
-	
-	@Override
-	public void mouseMoved(MouseEvent arg0) {
+			}
+		});
 
-		
-	}
-	
-	@Override
-	public void mouseDragged(MouseEvent arg0) {
+		panel.addMouseMotionListener(new MouseMotionListener() {
 
-		int x = arg0.getX();
-		int y = arg0.getY();
-		flatLandSelector.reposition(x, y,xInitiial,yInitial);
-		
-	}
-});
+			@Override
+			public void mouseMoved(MouseEvent arg0) {
+
+			}
+
+			@Override
+			public void mouseDragged(MouseEvent arg0) {
+
+				int x = arg0.getX();
+				int y = arg0.getY();
+				flatLandSelector.reposition(x, y, xInitiial, yInitial);
+
+			}
+		});
 		flatLandWindow = new FlatLandWindow("Hello World", flatLand, panel, canvasWidth, canvasHeight);
 		mel.buildKeyBoardHandler(panel);
 		panel.requestFocus();
@@ -159,7 +154,7 @@ panel.addMouseMotionListener(new MouseMotionListener() {
 		panel.setFlatLandWindow(flatLandWindow);
 		panel.setSimulation(simulation);
 
-		new XmlLevelLoader(FILENAME, flatLand, physics);
+		new XmlLevelLoader(FILENAME, flatLand, physics, panel);
 
 		FlatLandFacebook instance = FlatLandFacebook.getInstance();
 		instance.getFlatlanderFaceBook();
@@ -174,26 +169,23 @@ panel.addMouseMotionListener(new MouseMotionListener() {
 
 			refreshNotes(NOTES);
 			int fpscount = 0;
-			long[] FPSframes = new long[60];
-			long[] timeSpentOnUpdate = new long[60];
-			long[] timeSpentOnTakingPictureAndDeveloping = new long[60];
-			long[] timeSpentOnOther = new long[60];
+			long[] FPSframes = new long[targetFrameRate-1];
+			long[] timeSpentOnUpdate = new long[targetFrameRate-1];
+			long[] timeSpentOnTakingPictureAndDeveloping = new long[targetFrameRate-1];
+			long[] timeSpentOnOther = new long[targetFrameRate-1];
 
 			LOG.println("run the simulation");
 			while (!flatLandWindow.isClose()) {
 				long start = System.currentTimeMillis();
 				long startUpdate = System.currentTimeMillis();
-				panel.getGraphics();
 
 				if (firstTime) {
 					physics.applyPhysics();
 					flatLand.update();
-					theStartCamera.update(FlatLanderFaceBook.getInstance().getFlatlanderFaceBookPool());
 
 				}
 				long endUpdate = System.currentTimeMillis();
 				long startPicAndDevelop = System.currentTimeMillis();
-
 				panel.repaint();
 
 				long endPicAndDevelop = System.currentTimeMillis();
@@ -204,26 +196,26 @@ panel.addMouseMotionListener(new MouseMotionListener() {
 				long end = System.currentTimeMillis();
 
 				long length = end - start;
-				if (16 - (length / 1000) > 0)	
-					Thread.sleep(16 - (length / 1000));
+				
 				long lengthUpdate = endUpdate - startUpdate;
 				long lengthPicAndDevelop = endPicAndDevelop - startPicAndDevelop;
 				long lengthOther = endOther - startOther;
 
-				long end2 = System.currentTimeMillis();
-
-				
-
-//					System.err.println("MSPF "+tot);
-
 				fpscount++;
 
 				firstTime = true;
-				if (fpscount < 60) {
-					FPSframes[fpscount] = length;
+				
+				if (fpscount < targetFrameRate-1) {
 					timeSpentOnUpdate[fpscount] = lengthUpdate;
 					timeSpentOnTakingPictureAndDeveloping[fpscount] = lengthPicAndDevelop;
 					timeSpentOnOther[fpscount] = lengthOther;
+					if(length<1000/targetFrameRate) {
+						FPSframes[fpscount] = 1000/targetFrameRate;
+					Thread.sleep(1000/targetFrameRate - length);
+					}else {
+						FPSframes[fpscount] = length;
+						Thread.sleep(length);
+					}
 				} else {
 
 					long total = length;
@@ -250,7 +242,7 @@ panel.addMouseMotionListener(new MouseMotionListener() {
 					if (totalMAX == BigDecimal.ZERO)
 						totalMAX = BigDecimal.ONE;
 
-					fPS = BigDecimal.valueOf(61).divide(totalMAX, 1, RoundingMode.HALF_UP);
+					fPS = BigDecimal.valueOf(targetFrameRate).multiply(totalMAX);
 
 					if (totalMAX != BigDecimal.valueOf(0)) {
 
@@ -268,12 +260,16 @@ panel.addMouseMotionListener(new MouseMotionListener() {
 					}
 					UpdateTimeSingleton.getInstance().setCurrentTime(
 							totalMAXU.doubleValue() + totalMAXP.doubleValue() + totalMAXO.doubleValue());
+					
+					if(totalMAX.longValue()/targetFrameRate<1000/targetFrameRate)
+						Thread.sleep(1000/targetFrameRate - totalMAX.longValue()/targetFrameRate);
+					else
+						Thread.sleep(totalMAX.longValue()/targetFrameRate);
+					
+					
 					fpscount = 0;
-
 					LOG.println(mel.getName() + ": " + mel.x + " , " + mel.y + " , " + mel.direction);
 				}
-//				
-//				
 			}
 
 			LOG.close();
