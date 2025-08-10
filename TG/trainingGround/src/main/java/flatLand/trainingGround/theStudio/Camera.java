@@ -4,16 +4,29 @@ import java.awt.Color;
 import java.awt.Graphics;
 import java.awt.image.BufferStrategy;
 import java.awt.image.BufferedImage;
+import java.io.ByteArrayOutputStream;
+import java.io.PrintStream;
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Set;
 
+import Box.Box.PromptObserver;
+import Box.GameSpaceInterpreter.SandBox;
+import Drawing.ImagePile;
+import Drawing.ImageStackEntry;
+import FlatLand.Physics.TypeOfEntity;
 import FlatLandStructure.ViewableFlatLand;
 import FlatLander.BoundingBox;
 import FlatLander.FlatLandFacebook;
 import FlatLander.FlatLander;
-import XMLLoader.FlatLanderWrper;
-import XMLLoader.PlayerWrper;
+import XMLLEVELLOADER.FlatLanderWrper;
+import dialogManagement.DialogManager;
+import flatLand.trainingGround.EventHandler;
 import flatLand.trainingGround.GAMSTATUS;
 import flatLand.trainingGround.GameStatus;
+import flatLand.trainingGround.Sprites.ObserverPrompt;
+import flatLand.trainingGround.Sprites.TerminalSprite;
+import theStart.thePeople.FlatLanderFaceBook;
 
 public class Camera {
 	private ViewableFlatLand flatland;
@@ -23,13 +36,17 @@ public class Camera {
 	private int cameraPosYoncanvas = 0;
 	private int cameraPosXinFlatland = 0;
 	private int cameraPosYinFlatland = 0;
-	private XMLLoader.PlayerWrper play;
+	private XMLLEVELLOADER.PlayerWrper play;
 	private Graphics graphics;
 	private BufferStrategy bufferStrategy;
 	private int canvasWidth;
 	private int canvasHeight;
+	private XMLLEVELLOADER.FlatLanderWrper hud;
+	String terminalPath = "/home/wes/git/TrainingGround/TG/trainingGround/res/charmap-oldschool_white_sew.png";
+	private HashMap<PromptObserver, TerminalSprite> map;
+
 	public Camera(ViewableFlatLand flatland, int cameraWidth, int cameraHeight, int posX, int posY,
-			XMLLoader.PlayerWrper player) {
+			XMLLEVELLOADER.PlayerWrper player) {
 
 		cameraPosXoncanvas = posX;
 		cameraPosYoncanvas = posY;
@@ -37,11 +54,13 @@ public class Camera {
 		this.cameraWidth = cameraWidth;
 		this.cameraHeight = cameraHeight;
 		play = player;
-		cameraPosXinFlatland = play.getX() - ( cameraWidth/2 + play.getSprite().getWidth() / 2 +cameraPosXoncanvas);
-		cameraPosYinFlatland = play.getY() - (cameraHeight/2+play.getSprite().getHeight() / 2+cameraPosYoncanvas);
+		cameraPosXinFlatland = play.getX() - (cameraWidth / 2 + play.getSprite().getWidth() / 2 + cameraPosXoncanvas);
+		cameraPosYinFlatland = play.getY() - (cameraHeight / 2 + play.getSprite().getHeight() / 2 + cameraPosYoncanvas);
+		buildHud(flatland, null);
 	}
 
-	public Camera(ViewableFlatLand flatland, int cameraWidth, int cameraHeight, int canvasWidth, int canvasHeight, int posX, int posY, PlayerWrper mel) {
+	public Camera(ViewableFlatLand flatland, int cameraWidth, int cameraHeight, int canvasWidth, int canvasHeight,
+			int posX, int posY, XMLLEVELLOADER.PlayerWrper mel) {
 
 		this.canvasWidth = canvasWidth;
 		this.canvasHeight = canvasHeight;
@@ -51,8 +70,9 @@ public class Camera {
 		this.cameraWidth = cameraWidth;
 		this.cameraHeight = cameraHeight;
 		play = mel;
-		cameraPosXinFlatland = play.getX() - ( cameraWidth/2 + play.getSprite().getWidth() / 2 +cameraPosXoncanvas);
-		cameraPosYinFlatland = play.getY() - (cameraHeight/2+play.getSprite().getHeight() / 2+cameraPosYoncanvas);
+		cameraPosXinFlatland = play.getX() - (cameraWidth / 2 + play.getSprite().getWidth() / 2 + cameraPosXoncanvas);
+		cameraPosYinFlatland = play.getY() - (cameraHeight / 2 + play.getSprite().getHeight() / 2 + cameraPosYoncanvas);
+		buildHud(flatland, null);
 	}
 
 	public Camera(ViewableFlatLand flatLandLE, int cameraWidth, int cameraHeight, int canvasWidth, int canvasHeight,
@@ -67,10 +87,10 @@ public class Camera {
 		play = null;
 		cameraPosXinFlatland = 0;
 		cameraPosYinFlatland = 0;
+		buildHud(flatLandLE, null);
 	}
 
 	public Graphics takePictureOfFlatland(Graphics graphics2) {
-
 
 		drawFlatLand(graphics2);
 
@@ -81,27 +101,29 @@ public class Camera {
 
 		ArrayList<FlatLander> bookOfFlatLanders = FlatLandFacebook.getInstance().getFlatlanderFaceBook();
 
-	
 		GameStatus statusInstance = GameStatus.getInstance();
-		if(statusInstance.isStatus(GAMSTATUS.FINPROD)) {
-		graphics.clearRect(cameraPosXoncanvas, cameraPosYoncanvas, cameraWidth, cameraHeight);
+		if (statusInstance.isStatus(GAMSTATUS.FINPROD)) {
+			graphics.clearRect(cameraPosXoncanvas, cameraPosYoncanvas, cameraWidth, cameraHeight);
 		}
-		for (FlatLander flatLander : bookOfFlatLanders) {
+
+		
+		for (int i = bookOfFlatLanders.size() - 1; i >= 0; i--) {
+			FlatLander flatLander = bookOfFlatLanders.get(i);
 
 			if (flatLander instanceof FlatLanderWrper) {
 				BufferedImage bufferedImage = ((FlatLanderWrper) flatLander).getSprite().update(flatLander);
-				FlatLanderWrper terminal = ((XMLLoader.FlatLanderWrper) flatLander).getTerminal();
+				FlatLanderWrper terminal = ((FlatLanderWrper) flatLander).getTerminal();
 
 				BufferedImage term = null;
 				if (terminal != null)
 					term = terminal.getSprite().update(flatLander);
-				
+
 				int x = mapFromFlatLandToScreenSpaceX(flatLander.getX());
 				int y = mapFromFlatLandToScreenSpaceY(flatLander.getY());
 
 				if ((x >= 0 || x <= cameraWidth) && (y >= 0 || y <= cameraHeight)) {
 					if (terminal != null)
-						graphics.drawImage(term, x-150, y - 150, null);
+						graphics.drawImage(term, x - 150, y - 150, null);
 					graphics.drawImage(bufferedImage, x, y, null);
 					if (flatLander.isDrawBB()) {
 						BoundingBox currentflatLanderBB = flatLander.getCurrentflatLanderBB();
@@ -113,15 +135,15 @@ public class Camera {
 						int height = y3 - y2;
 						Color color = graphics.getColor();
 						graphics.setColor(Color.GREEN);
-						
-						graphics.drawRect( x, y, width, height);
+
+						graphics.drawRect(x, y, width, height);
 						graphics.setColor(color);
 					}
 
 				}
-			} else if (flatLander instanceof XMLLoader.PlayerWrper) {
-				BufferedImage bufferedImage = ((XMLLoader.PlayerWrper) flatLander).getSprite().update(flatLander);
-				FlatLanderWrper terminal = ((XMLLoader.PlayerWrper) flatLander).getTerminal();
+			} else if (flatLander instanceof XMLLEVELLOADER.PlayerWrper) {
+				BufferedImage bufferedImage = ((XMLLEVELLOADER.PlayerWrper) flatLander).getSprite().update(flatLander);
+				XMLLEVELLOADER.FlatLanderWrper terminal = ((XMLLEVELLOADER.PlayerWrper) flatLander).getTerminal();
 
 				BufferedImage term = null;
 				if (terminal != null)
@@ -133,7 +155,7 @@ public class Camera {
 				if ((x >= 0 || x <= cameraWidth) && (y >= 0 || y <= cameraHeight)) {
 
 					if (terminal != null)
-						graphics.drawImage(term, x-150, y - 150, null);
+						graphics.drawImage(term, x - 150, y - 150, null);
 					graphics.drawImage(bufferedImage, x, y, null);
 					if (flatLander.isDrawBB()) {
 						BoundingBox currentflatLanderBB = flatLander.getCurrentflatLanderBB();
@@ -148,28 +170,61 @@ public class Camera {
 						graphics.drawRect(x, y, width, height);
 						graphics.setColor(color);
 					}
-					
+
 				}
 			}
 		}
-		
+
 		if (play != null) {
-			cameraPosXinFlatland = play.getX() - ( cameraWidth/2 + play.getSprite().getWidth() / 2 +cameraPosXoncanvas);
-			cameraPosYinFlatland = play.getY() - (cameraHeight/2+play.getSprite().getHeight() / 2+cameraPosYoncanvas);
+			cameraPosXinFlatland = play.getX()
+					- (cameraWidth / 2 + play.getSprite().getWidth() / 2 + cameraPosXoncanvas);
+			cameraPosYinFlatland = play.getY()
+					- (cameraHeight / 2 + play.getSprite().getHeight() / 2 + cameraPosYoncanvas);
 		} else {
 			cameraPosXinFlatland = 0;
 			cameraPosYinFlatland = 0;
 		}
-		if(statusInstance.isStatus(GAMSTATUS.FINPROD)) {
+		if (statusInstance.isStatus(GAMSTATUS.FINPROD)) {
 			graphics.setColor(Color.blue);
-			graphics.fillRect(cameraPosXoncanvas+cameraWidth, 0, canvasWidth, canvasHeight );
+			graphics.fillRect(cameraPosXoncanvas + cameraWidth, 0, canvasWidth, canvasHeight);
 			graphics.setColor(Color.yellow);
-			graphics.fillRect(0, cameraPosYoncanvas+cameraHeight, canvasWidth, canvasHeight );
-		graphics.setColor(Color.red);
-		graphics.fillRect(0, 0, cameraPosXoncanvas, canvasHeight );
-		graphics.setColor(Color.green);
-		graphics.fillRect(0, 0, canvasWidth, cameraPosYoncanvas );
+			graphics.fillRect(0, cameraPosYoncanvas + cameraHeight, canvasWidth, canvasHeight);
+			graphics.setColor(Color.red);
+			graphics.fillRect(0, 0, cameraPosXoncanvas, canvasHeight);
+			graphics.setColor(Color.green);
+			graphics.fillRect(0, 0, canvasWidth, cameraPosYoncanvas);
 		}
+
+		ImageStackEntry takefromthefront = ImagePile.getInstance().takefromthefront();
+		if (takefromthefront != null) {
+			BufferedImage img = takefromthefront.getImg();
+
+			graphics.drawImage(img, 0, 0, null);
+
+			int count = 0;
+			Set<PromptObserver> keySet = map.keySet();
+			for (PromptObserver promptObserver : keySet) {
+				TerminalSprite terminalSprite = map.get(promptObserver);
+				BufferedImage update = terminalSprite.update(hud);
+				graphics.drawImage(update, 100 + count * 250, 0, null);
+				count++;
+			}
+
+		}
+
+	}
+
+	public void buildHud(ViewableFlatLand flatLand2, EventHandler events) {
+		TerminalSprite sprite2 = new TerminalSprite(terminalPath, 10, 1, 250);
+		PromptObserver promptOb = new PromptObserver(sprite2);
+		promptOb.notify("level-N ");
+		TerminalSprite sprite3 = new TerminalSprite(terminalPath, 10, 1, 250);
+		PromptObserver promptOb3 = new PromptObserver(sprite3);
+		promptOb3.notify("lives-M ");
+		map = new HashMap<PromptObserver, TerminalSprite>();
+		map.put(promptOb, sprite2);
+		map.put(promptOb3, sprite3);
+
 	}
 
 	public int mapFromFlatLandToScreenSpaceX(int input) {
@@ -177,14 +232,7 @@ public class Camera {
 		int input_start = cameraPosXinFlatland;
 		int output_start = 0;
 		int output_end = cameraWidth;
-		double slope = 1.0 * (output_end - output_start) / (input_end - input_start);
-		return output_start + (int) Math.round(slope * (input - input_start));
-	}
-	public int mapFromScreenSpaceToFlatLAndX(int input) {
-		int input_end = cameraPosXoncanvas + cameraWidth;
-		int input_start = cameraPosXoncanvas;
-		int output_start = 0;
-		int output_end = cameraWidth;
+
 		double slope = 1.0 * (output_end - output_start) / (input_end - input_start);
 		return output_start + (int) Math.round(slope * (input - input_start));
 	}
@@ -197,6 +245,16 @@ public class Camera {
 		double slope = 1.0 * (output_end - output_start) / (input_end - input_start);
 		return output_start + (int) Math.round(slope * (input - input_start));
 	}
+
+	public int mapFromScreenSpaceToFlatLAndX(int input) {
+		int input_end = cameraPosXoncanvas + cameraWidth;
+		int input_start = cameraPosXoncanvas;
+		int output_start = 0;
+		int output_end = cameraWidth;
+		double slope = 1.0 * (output_end - output_start) / (input_end - input_start);
+		return output_start + (int) Math.round(slope * (input - input_start));
+	}
+
 	public int mapFromScreenSpaceFlatLandY(int input) {
 		int input_end = cameraPosYoncanvas + cameraHeight;
 		int input_start = cameraPosYoncanvas;

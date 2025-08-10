@@ -6,35 +6,46 @@ import FlatLander.FlatLandFacebook;
 import FlatLander.FlatLander;
 import Logging.LOG;
 import Player.Player;
-import XMLLoader.FlatLanderWrper;
+import XMLLEVELLOADER.FlatLanderWrper;
+import XMLLEVELLOADER.PlayerWrper;
 
 public class Physics extends LOG implements Actions.Physics  {
 
 	private Double gravity;
-	private int cameraPosYinFlatland;
-	private int cameraHeight;
+    private double airResistance; // New field for air resistance
+    private int cameraPosYinFlatland;
+    private int cameraHeight;
 
-	public Physics(double d, int cameraPosYinFlatland, int cameraHeight) {
-		this.gravity = d;
-		this.cameraPosYinFlatland = cameraPosYinFlatland;
-		this.cameraHeight = cameraHeight;
+    public Physics(double gravity, double airResistance, int cameraPosYinFlatland, int cameraHeight) {
+        this.gravity = gravity;
+        this.airResistance = airResistance;
+        this.cameraPosYinFlatland = cameraPosYinFlatland;
+        this.cameraHeight = cameraHeight;
+    }
 
-	}
 
 	public Integer fallDistance(FlatLander flatLander) {
-		Double time = UpdateTimeSingleton.getInstance().getCurrentTime();
-		double tim = Math.pow(time, 2) / 2;
+        double mass = flatLander.getMass(); // Assuming FlatLander has a getMass() method
+        double time = UpdateTimeSingleton.getInstance().getCurrentTime();
 
-		double d = gravity * tim;
+        // Calculate acceleration with air resistance
+        double acceleration = gravity - (airResistance / mass);
 
-		if (d > 0 && d < 1) {
+        // Ensure acceleration is not negative
+        if (acceleration < 0) {
+            acceleration = 0;
+        }
 
-			return 1;
-		}
+        // Calculate velocity and distance
+        double velocity = acceleration * time;
+        double distance = 0.5 * acceleration * Math.pow(time, 2);
 
-		return (int) d;
+        if (distance > 0 && distance < 1) {
+            return 1;
+        }
 
-	}
+        return (int) distance;
+    }
 
 	public void applyPhysics() {
 		ArrayList<FlatLander> bookOfFlatLanders = FlatLandFacebook.getInstance().getFlatlanderFaceBook();
@@ -91,23 +102,23 @@ public class Physics extends LOG implements Actions.Physics  {
 						break;
 
 					}
-				} else if (flatLander instanceof XMLLoader.PlayerWrper
+				} else if (flatLander instanceof PlayerWrper
 						&& flatLanderToCheckForCollisions instanceof FlatLanderWrper) {
 
-					if (!flatLander.equals(flatLanderToCheckForCollisions) && (((XMLLoader.PlayerWrper) flatLander)
+					if (!flatLander.equals(flatLanderToCheckForCollisions) && (((PlayerWrper) flatLander)
 							.collidesWith(((FlatLanderWrper) flatLanderToCheckForCollisions)))) {
 						collision = true;
-						collidesFrom = (((XMLLoader.PlayerWrper) flatLander)
+						collidesFrom = (((PlayerWrper) flatLander)
 								.collidesFrom(((FlatLanderWrper) flatLanderToCheckForCollisions)));
 
 						flatLanderToCheckForCollisionsCollided = flatLanderToCheckForCollisions;
 						break;
 
 					}
-					if (!flatLander.equals(flatLanderToCheckForCollisions) && ((((XMLLoader.PlayerWrper) flatLander)
+					if (!flatLander.equals(flatLanderToCheckForCollisions) && ((((PlayerWrper) flatLander)
 							.passesThrough(((FlatLanderWrper) flatLanderToCheckForCollisions))))) {
 						collision = true;
-						collidesFrom = (((XMLLoader.PlayerWrper) flatLander)
+						collidesFrom = (((PlayerWrper) flatLander)
 								.collidesFrom(((FlatLanderWrper) flatLanderToCheckForCollisions)));
 
 						flatLanderToCheckForCollisionsCollided = flatLanderToCheckForCollisions;
@@ -122,23 +133,23 @@ public class Physics extends LOG implements Actions.Physics  {
 
 					}
 				} else if (flatLander instanceof FlatLanderWrper
-						&& flatLanderToCheckForCollisions instanceof XMLLoader.PlayerWrper) {
+						&& flatLanderToCheckForCollisions instanceof PlayerWrper) {
 
 					if (!flatLander.equals(flatLanderToCheckForCollisions) && (((FlatLanderWrper) flatLander)
-							.collidesWith(((XMLLoader.PlayerWrper) flatLanderToCheckForCollisions)))) {
+							.collidesWith(((PlayerWrper) flatLanderToCheckForCollisions)))) {
 						collision = true;
 						collidesFrom = (((FlatLanderWrper) flatLander)
-								.collidesFrom(((XMLLoader.PlayerWrper) flatLanderToCheckForCollisions)));
+								.collidesFrom(((PlayerWrper) flatLanderToCheckForCollisions)));
 
 						flatLanderToCheckForCollisionsCollided = flatLanderToCheckForCollisions;
 						break;
 
 					}
 					if (!flatLander.equals(flatLanderToCheckForCollisions) && ((((FlatLanderWrper) flatLander)
-							.passesThrough(((XMLLoader.PlayerWrper) flatLanderToCheckForCollisions))))) {
+							.passesThrough(((PlayerWrper) flatLanderToCheckForCollisions))))) {
 						collision = true;
 						collidesFrom = (((FlatLanderWrper) flatLander)
-								.collidesFrom(((XMLLoader.PlayerWrper) flatLanderToCheckForCollisions)));
+								.collidesFrom(((PlayerWrper) flatLanderToCheckForCollisions)));
 
 						flatLanderToCheckForCollisionsCollided = flatLanderToCheckForCollisions;
 						break;
@@ -170,8 +181,8 @@ public class Physics extends LOG implements Actions.Physics  {
 			FlatLander flatLanderToCheckForCollisionsCollided) {
 		if (collidesFrom == 1) {
 			// top
-			if (flatLander instanceof XMLLoader.PlayerWrper) {
-				XMLLoader.PlayerWrper flatLander2 = (XMLLoader.PlayerWrper) flatLander;
+			if (flatLander instanceof PlayerWrper) {
+				PlayerWrper flatLander2 = (PlayerWrper) flatLander;
 				if (flatLanderToCheckForCollisionsCollided instanceof FlatLanderWrper) {
 					while (flatLander2.collidesWith(((FlatLanderWrper) flatLanderToCheckForCollisionsCollided))
 							|| flatLander2.passesThrough(((FlatLanderWrper) flatLanderToCheckForCollisionsCollided))) {
@@ -195,8 +206,8 @@ public class Physics extends LOG implements Actions.Physics  {
 
 		} else if (collidesFrom == 2) {
 			// right
-			if (flatLander instanceof XMLLoader.PlayerWrper) {
-				XMLLoader.PlayerWrper flatLander2 = (XMLLoader.PlayerWrper) flatLander;
+			if (flatLander instanceof PlayerWrper) {
+				PlayerWrper flatLander2 = (PlayerWrper) flatLander;
 				if (flatLanderToCheckForCollisionsCollided instanceof FlatLanderWrper) {
 					while (flatLander2.collidesWith(((FlatLanderWrper) flatLanderToCheckForCollisionsCollided))
 							|| flatLander2.passesThrough(((FlatLanderWrper) flatLanderToCheckForCollisionsCollided))) {
@@ -220,8 +231,8 @@ public class Physics extends LOG implements Actions.Physics  {
 			} else if (collidesFrom == 3) {
 				// bottem
 
-				if (flatLander instanceof XMLLoader.PlayerWrper) {
-					XMLLoader.PlayerWrper flatLander2 = (XMLLoader.PlayerWrper) flatLander;
+				if (flatLander instanceof PlayerWrper) {
+					PlayerWrper flatLander2 = (PlayerWrper) flatLander;
 					if (flatLanderToCheckForCollisionsCollided instanceof FlatLanderWrper) {
 						while (flatLander2.collidesWith(((FlatLanderWrper) flatLanderToCheckForCollisionsCollided))
 								|| flatLander2
@@ -247,8 +258,8 @@ public class Physics extends LOG implements Actions.Physics  {
 
 			} else if (collidesFrom == 4) {
 				// left
-				if (flatLander instanceof XMLLoader.PlayerWrper) {
-					XMLLoader.PlayerWrper flatLander2 = (XMLLoader.PlayerWrper) flatLander;
+				if (flatLander instanceof PlayerWrper) {
+					PlayerWrper flatLander2 = (PlayerWrper) flatLander;
 					if (flatLanderToCheckForCollisionsCollided instanceof FlatLanderWrper) {
 						while (flatLander2.collidesWith(((FlatLanderWrper) flatLanderToCheckForCollisionsCollided))
 								|| flatLander2
@@ -276,6 +287,15 @@ public class Physics extends LOG implements Actions.Physics  {
 		}
 	}
 
+	
+    public void setGravity(double gravity) {
+        this.gravity = gravity;
+    }
+
+    public void setAirResistance(double airResistance) {
+        this.airResistance = airResistance;
+    }
+	
 	public void some_awesome_function_that_is_totaly_finished_and_not_made_up_oh_hey_look_over_there(
 			double somefuckingnumberthatisjustfuckingmadeupbyheywhoare_you_what_are_you_doing_arrrrrrrrgh,
 			int your_currentweighttimeforIT_seconds, int your_currentweighttimeforIT_minuts,

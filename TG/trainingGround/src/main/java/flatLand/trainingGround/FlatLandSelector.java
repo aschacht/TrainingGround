@@ -7,7 +7,7 @@ import FlatLander.FlatLandFacebook;
 import flatLand.trainingGround.theStudio.Camera;
 
 import FlatLander.FlatLander;
-import XMLLoader.FlatLanderWrper;
+import XMLLEVELLOADER.FlatLanderWrper;
 public class FlatLandSelector {
 
 	private Camera theEyeInTheSky;

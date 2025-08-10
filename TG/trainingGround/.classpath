@@ -2,6 +2,7 @@
 <classpath>
 	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER/org.eclipse.jdt.internal.debug.ui.launcher.StandardVMType/JavaSE-1.8">
 		<attributes>
+			<attribute name="module" value="true"/>
 			<attribute name="maven.pomderived" value="true"/>
 		</attributes>
 	</classpathentry>
@@ -36,14 +37,39 @@
 			<attribute name="maven.pomderived" value="true"/>
 		</attributes>
 	</classpathentry>
-	<classpathentry kind="src" path="/SonificationStructure"/>
-	<classpathentry kind="src" path="/ActionLibrary"/>
 	<classpathentry kind="src" path="/LOGGING"/>
-	<classpathentry kind="src" path="/LoaderOfLevels"/>
 	<classpathentry kind="src" path="/AntAnimation"/>
-	<classpathentry kind="src" path="/GameView"/>
-	<classpathentry kind="src" path="/Sprites"/>
-	<classpathentry kind="src" path="/BoxInterpreter"/>
-	<classpathentry kind="src" path="/theStart"/>
+	<classpathentry kind="lib" path="/home/wes/Downloads/jinput-2.0.10.jar"/>
+	<classpathentry kind="lib" path="/home/wes/Downloads/jinput-2.0.10-natives-all.jar"/>
+	<classpathentry combineaccessrules="false" kind="src" path="/PBC2"/>
+	<classpathentry kind="src" path="/Monopoly_Island_Index"/>
+	<classpathentry kind="lib" path="/root/.m2/repository/org/bytedeco/javacv/1.5.5/javacv-1.5.5.jar" sourcepath="/root/.m2/repository/org/bytedeco/javacv/1.5.5/javacv-1.5.5-sources.jar">
+		<attributes>
+			<attribute name="maven.pomderived" value="true"/>
+			<attribute name="maven.groupId" value="org.bytedeco"/>
+			<attribute name="maven.artifactId" value="javacv"/>
+			<attribute name="maven.version" value="1.5.5"/>
+			<attribute name="maven.scope" value="compile"/>
+		</attributes>
+	</classpathentry>
+	<classpathentry kind="lib" path="/root/.m2/repository/org/bytedeco/opencv/4.5.1-1.5.5/opencv-4.5.1-1.5.5.jar" sourcepath="/root/.m2/repository/org/bytedeco/opencv/4.5.1-1.5.5/opencv-4.5.1-1.5.5-sources.jar">
+		<attributes>
+			<attribute name="maven.pomderived" value="true"/>
+			<attribute name="maven.groupId" value="org.bytedeco"/>
+			<attribute name="maven.artifactId" value="opencv"/>
+			<attribute name="maven.version" value="4.5.1-1.5.5"/>
+			<attribute name="maven.scope" value="compile"/>
+		</attributes>
+	</classpathentry>
+	<classpathentry kind="lib" path="/root/.m2/repository/com/github/sarxos/webcam-capture/0.3.12/webcam-capture-0.3.12.jar" sourcepath="/root/.m2/repository/com/github/sarxos/webcam-capture/0.3.12/webcam-capture-0.3.12-sources.jar">
+		<attributes>
+			<attribute name="maven.pomderived" value="true"/>
+			<attribute name="maven.groupId" value="com.github.sarxos"/>
+			<attribute name="maven.artifactId" value="webcam-capture"/>
+			<attribute name="maven.version" value="0.3.12"/>
+			<attribute name="maven.scope" value="compile"/>
+		</attributes>
+	</classpathentry>
+	<classpathentry kind="src" path="/SOM"/>
 	<classpathentry kind="output" path="target/classes"/>
 </classpath>

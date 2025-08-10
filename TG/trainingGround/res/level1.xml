@@ -10,24 +10,13 @@
 		<name>mike</name>
 		<xpos>100</xpos>
 		<ypos>100</ypos>
+		<zpos>0</zpos>
 		<scale>150</scale>
 		<preferdAction>
-			<action type="Wonder"></action>
+			<action type="DrawArcFasterVersion1"></action>
 		</preferdAction>
 		<actionStack>
-			<action type="repeat" times="200">
-				<action type="repeat" times="10">
-					<action type="GoInAStrightLineFor">
-						<distance>random*550</distance>
-					</action>
-				</action>
-				<action type="repeat" times="10">
-					<action type="GoInAStrightLineFor">
-						<distance>random*550</distance>
-					</action>
 					<action type="DrawArcFasterVersion1"></action>
-				</action>
-			</action>
 		</actionStack>
 		<sprite>res/zombie_n_skeleton2.png</sprite>
 	</object>
@@ -35,71 +24,30 @@
 		<name>gnarlyTree</name>
 		<xpos>400</xpos>
 		<ypos>250</ypos>
+		<zpos>0</zpos>
 		<scale>300</scale>
 		<preferdAction>
 			<action type="Wonder"></action>
 		</preferdAction>
 		<actionStack>
-			<action type="repeat" times="200">
-				<action type="repeat" times="10">
-					<action type="DrawArc"></action>
-					<action type="GoInAStrightLineFor">
-						<distance>random*50</distance>
-					</action>
-					<action type="wonder"></action>
-				</action>
-				<action type="repeat" times="10">
-					<action type="wonder"></action>
-					<action type="GoInAStrightLineFor">
-						<distance>random*50</distance>
-					</action>
-					<action type="DrawArcFasterVersion1"></action>
-				</action>
-			</action>
 		</actionStack>
 		<sprite>res/zombie_n_skeleton2.png</sprite>
-	</object>
-	<object type="Skeleton">
-		<name>gnarlyTree</name>
-		<xpos>500</xpos>
-		<ypos>500</ypos>
-		<scale>200</scale>
-		<preferdAction>
-			<action type="Wonder"></action>
-		</preferdAction>
-		<actionStack>
-			<action type="repeat" times="200">
-				<action type="repeat" times="10">
-					<action type="DrawArc"></action>
-					<action type="GoInAStrightLineFor">
-						<distance>random*50</distance>
-					</action>
-					<action type="wonder"></action>
-				</action>
-				<action type="repeat" times="10">
-					<action type="wonder"></action>
-					<action type="GoInAStrightLineFor">
-						<distance>random*50</distance>
-					</action>
-					<action type="DrawArcFasterVersion1"></action>
-				</action>
-			</action>
-		</actionStack>
-		<sprite1>res/walk_left.png</sprite1>
-		<sprite2>res/walk_right.png</sprite2>
 	</object>
 	<object type="ground_stone">
 		<name>ground1</name>
 		<xpos>0</xpos>
 		<ypos>200</ypos>
+		<zpos>0</zpos>
 		<scale>100</scale>
 		<width>400</width>
+		<height>1200</height>
 		<sprite>res/2015-02-26 Tileset.png</sprite>
 	</object>
 	<object type="platform_dirt">
 		<name>platform1</name>
 		<xpos>600</xpos>
 		<ypos>200</ypos>
+		<zpos>0</zpos>
 		<scale>100</scale>
 		<width>256</width>
 		<sprite>res/2015-02-26 Tileset.png</sprite>
@@ -107,20 +55,26 @@
 			<action type="Wonder"></action>
 		</preferdAction>
 		<actionStack>
-			<action type="repeat" times="200">
-				<action type="repeat" times="10">
-					<action type="GoInAStrightLineFor">
-						<distance>random*550</distance>
-					</action>
-					<action type ="wonder"></action>
-				</action>
-				<action type="repeat" times="10">
-					<action type="GoInAStrightLineFor">
-						<distance>random*550</distance>
-					</action>
-					<action type="DrawArcFasterVersion1"></action>
-				</action>
-			</action>
 		</actionStack>
 	</object>
+
+
+	<event type="story">
+		<name>theStart</name>
+		<x>0</x>
+		<y>250</y>
+	</event>
+	<event type="story">
+		<name>theMid</name>
+		<x>512</x>
+		<y>250</y>
+	</event>
+	<event type="LevelEnd">
+		<name>thePIT</name>
+		<x>1024</x>
+		<y>250</y>
+	</event>
+
+
+
 </level>
